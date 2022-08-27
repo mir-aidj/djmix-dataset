@@ -4,6 +4,11 @@ import json
 import traceback
 from yt_dlp import YoutubeDL
 
+
+def mkpath(*paths):
+  return os.path.realpath(os.path.join(*paths))
+
+
 DATASET_DIR = './dataset'
 MIX_DIR = mkpath(DATASET_DIR, 'mixes')
 TRACK_DIR = mkpath(DATASET_DIR, 'tracks')
@@ -71,10 +76,6 @@ def download_audio(url, path):
   }
   with YoutubeDL(params) as ydl:
     ydl.download(url)
-
-
-def mkpath(*paths):
-  return os.path.realpath(os.path.join(*paths))
 
 
 if __name__ == '__main__':
