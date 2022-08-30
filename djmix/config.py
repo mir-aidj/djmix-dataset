@@ -24,6 +24,14 @@ def set_root(path: str):
   _set('root', path)
 
 
+def get_audio_cache_size():
+  return _section.getint('audio_cache_size', 2048)
+
+
+def set_audio_cache_size(size: int):
+  _set('audio_cache_size', size)
+
+
 def _set(key: str, value: Any):
   _section[key] = value
   _save()

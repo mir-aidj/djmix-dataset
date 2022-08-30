@@ -3,7 +3,7 @@ import traceback
 from djmix import utils
 from .Audio import Audio
 from .Track import Track
-from .download import download_mix
+from ..download import download_mix
 from typing import List
 
 

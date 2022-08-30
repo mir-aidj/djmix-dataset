@@ -1,5 +1,5 @@
 from .Audio import Audio
-from .download import download_track
+from ..download import download_track
 from typing import Optional
 
 

@@ -2,7 +2,7 @@
 
 The DJ Mix dataset contains metadata of DJ mixes played by human DJs and played tracks in the mixes.
 
-## How to install `djmix` Python package
+## Installation instructions
 
 ### Install FFmpeg
 
@@ -38,3 +38,9 @@ dj.mixes[1234].download()
 # To download a track:
 dj.tracks['Uow3dMA5m14'].download()
 ```
+By default, it creates `djmix` directory at your home directory (i.e. `~/djmix`) and download audio files there.
+If you want to change the directory:
+```python
+dj.set_root('~/my/custom/path/to/data/dir')
+```
+It will save a configuration file at `~/djmix.ini`.

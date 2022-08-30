@@ -2,12 +2,24 @@ from __future__ import annotations
 
 import os
 import logging
+import traceback
 from typing import TYPE_CHECKING
 from yt_dlp import YoutubeDL
 from djmix import config, utils
 
 if TYPE_CHECKING:
   from djmix.models import Mix, Track
+
+
+def download():
+  from djmix import mixes
+  
+  for mix in mixes:
+    try:
+      mix.download()
+    except Exception as e:
+      logging.error(f'Failed to download mix: {mix.id}')
+      traceback.print_exc()
 
 
 def download_mix(mix: Mix):
