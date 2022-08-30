@@ -1,4 +1,5 @@
 from .Audio import Audio
+from djmix import config, utils
 from ..download import download_track
 from typing import Optional
 
@@ -12,3 +13,9 @@ class Track(Audio):
   
   def download(self):
     download_track(self)
+  
+  @property
+  def path(self) -> Optional[str]:
+    if self.id is None:
+      return None
+    return utils.mkpath(config.get_root(), 'tracks', self.id[0], f'{self.id}.mp3')

@@ -19,6 +19,7 @@ pytsmod = "^0.3.5"
 pydantic = "^1.9.2"
 pydub = "^0.25.1"
 cvxpy = "^1.2.1"
+matplotlib = "^3.5.3"
 
 [tool.poetry.dev-dependencies]
 

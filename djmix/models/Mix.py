@@ -1,6 +1,6 @@
 import logging
 import traceback
-from djmix import utils
+from djmix import utils, config, alignment, cvxopt
 from .Audio import Audio
 from .Track import Track
 from ..download import download_mix
@@ -21,23 +21,11 @@ class Mix(Audio):
   tags: List
   
   def __init__(self, data_dir: str, **data):
-    mix_id = data['id']
-    data['path'] = utils.mkpath(data_dir, 'mixes', f'{mix_id}.mp3')
-    
     tracks = []
     for track in data['tracklist']:
-      track_id = track['id']
-      if track_id is None:
-        track['path'] = None
-      else:
-        track['path'] = utils.mkpath(data_dir, 'tracks', track_id[0], f'{track_id}.mp3')
       tracks.append(Track(**track))
     data['tracklist'] = tracks
-    
     super().__init__(**data)
-  
-  def __repr__(self):
-    return f'Mix(id={self.id}, title="{self.title}")'
   
   def download(self):
     download_mix(self)
@@ -50,3 +38,19 @@ class Mix(Audio):
       except Exception as e:
         logging.error(f'Failed to download mix: https://www.youtube.com/watch?v={track.id}')
         traceback.print_exc()
+  
+  def align(self, **kwargs):
+    return alignment.align(self, **kwargs)
+  
+  def transitions(self):
+    return alignment.transitions(self)
+  
+  def cvxopt(self, **kwargs):
+    return cvxopt.optimize(self, **kwargs)
+  
+  @property
+  def path(self) -> str:
+    return utils.mkpath(config.get_root(), 'mixes', f'{self.id}.mp3')
+  
+  def __repr__(self):
+    return f'Mix(id={self.id}, title="{self.title}")'

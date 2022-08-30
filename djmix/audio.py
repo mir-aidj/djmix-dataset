@@ -7,6 +7,7 @@ import scipy.io.wavfile
 from typing import TYPE_CHECKING
 from functools import lru_cache
 from pydub import AudioSegment
+from madmom.audio.signal import Signal
 from . import config
 
 if TYPE_CHECKING:
@@ -21,7 +22,9 @@ except ImportError as e:
 
 
 @lru_cache(maxsize=config.get_audio_cache_size())
-def load_audio(path, sr=None, mono=True, normalize=False, to_numpy=True):
+def load_audio(path, sr=None, mono=True, normalize=False, format='numpy'):
+  assert format in ['numpy', 'pydub', 'madmom']
+  
   with open(path, 'rb') as file_obj:
     pydub_audio = AudioSegment.from_file(file_obj)
     
@@ -42,11 +45,15 @@ def load_audio(path, sr=None, mono=True, normalize=False, to_numpy=True):
       # headroom is how close to the maximum volume to boost the signal up to (specified in dB)
       pydub_audio = pydub_audio.normalize(headroom=0.1)
     
-    if to_numpy:
-      np_array = pydub_to_numpy(pydub_audio)
-      return np_array, sr
-    else:
+    if format == 'numpy':
+      nparray = pydub_to_numpy(pydub_audio)
+      return nparray, sr
+    elif format == 'pydub':
       return pydub_audio, sr
+    elif format == 'madmom':
+      nparray = pydub_to_numpy(pydub_audio)
+      signal = numpy_to_madmom(nparray, sr)
+      return signal, sr
 
 
 def pydub_to_numpy(pydub_audio: AudioSegment) -> NDArray:
@@ -73,6 +80,10 @@ def numpy_to_pydub(np_array: NDArray, sr: int) -> AudioSegment:
   wav_io.seek(0)
   sound = AudioSegment.from_wav(wav_io)
   return sound
+
+
+def numpy_to_madmom(nparray: NDArray, sr: int) -> Signal:
+  return Signal(nparray, sample_rate=sr, num_channels=len(nparray.shape))
 
 
 def export_pydub(pydub_audio: AudioSegment, uri: str, format='mp3'):
