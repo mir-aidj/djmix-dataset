@@ -89,8 +89,8 @@ def transitions(mix: models.Mix):
   df = pd.concat([df, pd.DataFrame(data)], axis=1)
   
   # Create unique IDs.
-  df['_id'] = df['mix_id'] + '-' + df['i_tran'].map(lambda i: f'{i:02}')
-  df = df.set_index('_id')
+  df['tran_id'] = df['mix_id'] + '-' + df['i_tran'].map(lambda i: f'{i:02}')
+  df = df.set_index('tran_id')
   
   # Select columns I want.
   df = df[[
