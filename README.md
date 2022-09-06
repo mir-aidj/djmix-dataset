@@ -2,6 +2,8 @@
 
 The DJ Mix dataset contains metadata of DJ mixes played by human DJs and played tracks in the mixes.
 
+If you only want to get the metadata, check [here](dataset/djmix-dataset.json).
+
 ## Installation instructions
 Tested on Python 3.9.
 
